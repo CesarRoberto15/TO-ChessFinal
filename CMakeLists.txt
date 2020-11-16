@@ -26,23 +26,25 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-file(GLOB files "*.h" "*.cpp" ".qrc") # files es nombre
+FILE(GLOB sources *.cpp)
+FILE(GLOB headers *.h)
+FILE(GLOB img *.qrc)
 
 if(ANDROID)
   add_library(TO-ChessFinal SHARED
     main.cpp
-    mainwindow.cpp
-    mainwindow.h
+    ${sources}
+    ${headers}
+    ${img}
     mainwindow.ui
-    ${files}
   )
 else()
   add_executable(TO-ChessFinal
     main.cpp
-    mainwindow.cpp
-    mainwindow.h
+    ${img}
+    ${sources}
+    ${headers}
     mainwindow.ui
-    ${files}
   )
 endif()
 
