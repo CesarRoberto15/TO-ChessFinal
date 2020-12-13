@@ -1,6 +1,5 @@
 #ifndef ALFIL_H
 #define ALFIL_H
-
 #include "pieza.h"
 
 class alfil:public pieza

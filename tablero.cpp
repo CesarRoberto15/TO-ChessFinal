@@ -2,11 +2,11 @@
 #include "caja.h"
 #include "principal.h"
 #include "peon.h"
-#include "caballo.h"
-#include "torre.h"
 #include "alfil.h"
-#include "reina.h"
+#include "torre.h"
 #include "rey.h"
+#include "reina.h"
+#include "caballo.h"
 
 extern principal *juego;
 tablero::tablero()
@@ -16,18 +16,27 @@ tablero::tablero()
 }
 
 void tablero::dibujarCajas(int x, int y){
+    //Espaciado
     int espacio=50;
+    //Dibujamos todos los cuadrados
     for(int i=0; i<8;i++){
         for(int j=0;j<8;j++){
+            //Creamos la caja
             caja *rect= new caja();
             juego->boxes[i][j]=rect;
             rect->row = i;
             rect->col = j;
+            //Posicionamos
             rect->setPos(x+espacio*j,y+espacio*i);
-            if((i+j)%2==0)
-                rect->setOriginalColor(Qt::lightGray);
-            else
-                rect->setOriginalColor(Qt::darkGray);
+            //Establecemos el color de la caja
+            if((i+j)%2==0){
+                QColor color(192,57,43); //Marron
+                rect->setOriginalColor(color);
+            }else{
+                QColor color(245,176,65);//Naranja
+                rect->setOriginalColor(color);
+            }
+            //Lo añadimos a la vista
              juego->addItem(rect);
         }
     }
@@ -60,8 +69,8 @@ void tablero::dibujarPiezas(){
         juego->addItem(FichasBlancas[aux++]);
     }
 }
-void tablero::CrearFichasblancas()
-{
+//Creamos las fichas Blancas
+void tablero::CrearFichasblancas(){
     pieza *piece;
     for(int i = 0; i < 8; i++) {
         piece = new peon("White");
@@ -84,8 +93,8 @@ void tablero::CrearFichasblancas()
     piece = new torre("White");
     FichasBlancas.append(piece);
 }
-void tablero::CrearFichasNegras()
-{
+//Creamos las fichas Negras
+void tablero::CrearFichasNegras(){
     pieza *piece;
     piece = new torre("Black");
     FichasNegras.append(piece);

@@ -7,13 +7,14 @@ pieza::pieza()
 }
 pieza::pieza(QString team, QGraphicsItem *parent):QGraphicsPixmapItem(parent)
 {
-    colocado = true;
+    vivo = true;
     equipo = team;
-
 
 }
 
 void pieza::mousePressEvent(QGraphicsSceneMouseEvent *event){
+    //Reiniciamos el JAQUE
+     juego->jaque->setVisible(false);
     //Lo desseleccionamos
     if (this==juego->piezaSeleccionada){
         juego->piezaSeleccionada->cajaContenedora->resetColor();
@@ -21,26 +22,31 @@ void pieza::mousePressEvent(QGraphicsSceneMouseEvent *event){
         juego->piezaSeleccionada = NULL;
         return;
     }
-
-    if((!colocado )|| ( (juego->getTurno() != this->equipo)&& (!juego->piezaSeleccionada)) )
+    //Verificamos si esta vivo y si es su turno o no, de no serlo ,
+    //no se le puede seleccionar
+    if((!vivo )|| ( (juego->getTurno() != this->equipo)&& (!juego->piezaSeleccionada)) )
             return;
     //Se vuelve la pieza seleccionada
-  if(!juego->piezaSeleccionada){
-      juego->piezaSeleccionada = this;
-      juego->piezaSeleccionada->cajaContenedora->setColor(Qt::red);
-      juego->piezaSeleccionada->movimientos();
-   }
-     else if(this->equipo != juego->piezaSeleccionada->equipo){
-      this->cajaContenedora->mousePressEvent(event);
-   }
+      if(!juego->piezaSeleccionada){
+          juego->piezaSeleccionada = this;
+          juego->piezaSeleccionada->cajaContenedora->setColor(Qt::red);
+          juego->piezaSeleccionada->movimientos();
+       }
+      //Si hay una pieza selecionada y seleccionamos a otra ficha
+      //del otro equipo
+         else if(this->equipo != juego->piezaSeleccionada->equipo){
+          this->cajaContenedora->mousePressEvent(event);
+       }
 
 }
+
 QString pieza::getEquipo(){
     return this->equipo;
 }
 void pieza::setCaja(caja *box){
     this->cajaContenedora=box;
 }
+//Pintamos las cajas dependiendo si estan vacias o no
 void pieza::pintarCaja(caja *box){
     if (box->lleno){
         box->setColor(Qt::yellow);
@@ -48,6 +54,7 @@ void pieza::pintarCaja(caja *box){
         Posiblesmovimientos.last()->setColor(Qt::blue);
     }
 }
+//Limpiamos los movimientos
 void pieza::limpiarMovimientos(){
     for(int i=0;i < Posiblesmovimientos.size();i++){
         Posiblesmovimientos[i]->resetColor();
@@ -59,6 +66,6 @@ caja * pieza::getCaja(){
 QList <caja *> pieza::getPMovimientos(){
     return this->Posiblesmovimientos;
 }
-void pieza::setColocado(bool valor){
-    this->colocado=valor;
+void pieza::setLife(bool valor){
+    this->vivo=valor;
 }
